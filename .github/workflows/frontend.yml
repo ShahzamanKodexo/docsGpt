@@ -22,7 +22,9 @@ jobs:
         run: yarn install
 
       - name: Make build
-        run: yarn build
+        run: |
+          cd frontend
+          yarn build
 
       - name: List file
         run: ls -la
