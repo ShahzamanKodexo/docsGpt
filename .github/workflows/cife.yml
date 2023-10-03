@@ -1,4 +1,4 @@
-name: Build and push DocsGPT-FE Docker image
+name: Build, push, and deploy DocsGPT-FE Docker image
 
 on:
   workflow_dispatch:
@@ -35,7 +35,6 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Runs a single command using the runners shell
       - name: Build and push Docker images to docker.io and ghcr.io
         uses: docker/build-push-action@v4
         with:
@@ -46,3 +45,33 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/docsgpt-fe:latest
             ghcr.io/${{ github.repository_owner }}/docsgpt-fe:latest
+
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x .git ./node_modules
+
+      - name: Get timestamp
+        uses: gerred/actions/current-time@master
+        id: current-time
+
+      - name: Run string replace
+        uses: frabert/replace-string-action@master
+        id: format-time
+        with:
+          pattern: '[:\.]+'
+          string: "${{ steps.current-time.outputs.time }}"
+          replace-with: "-"
+          flags: "g"
+
+      - name: Beanstalk Deploy for app
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.MY_AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.MY_AWS_SECRET_KEY }}
+          application_name: docsgpt
+          environment_name: Docsgpt-main
+          version_label: "Docsgpt-main-${{ steps.format-time.outputs.replaced }}"
+          region: us-east-1
+          deployment_package: deploy.zip
+
+      - name: Deployed!
+        run: echo App deployed to ELB
