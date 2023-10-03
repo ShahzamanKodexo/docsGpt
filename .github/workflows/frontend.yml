@@ -19,12 +19,12 @@ jobs:
         run: |
           echo "VITE_API_HOST=${{ secrets.VITE_API_HOST }}" > .env
       - name: Install Packages
-        run: yarn install
+        run: npm install
 
       - name: Make build
         run: |
           cd frontend
-          yarn build
+          npm run build
 
       - name: List file
         run: ls -la
