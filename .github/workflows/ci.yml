@@ -40,7 +40,7 @@ jobs:
       - name: Build and push Docker images to docker.io and ghcr.io
         uses: docker/build-push-action@v4
         with:
-          file: './application/Dockerfile'
+          file: "./application/Dockerfile"
           platforms: linux/amd64
           context: ./application
           push: true
