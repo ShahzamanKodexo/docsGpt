@@ -37,9 +37,9 @@ jobs:
         with:
           aws_access_key: ${{ secrets.MY_AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.MY_AWS_SECRET_KEY }}
-          application_name: docsgpt
-          environment_name: Docsgpt-main
-          version_label: "Docsgpt-main-${{ steps.format-time.outputs.replaced }}"
+          application_name: ai-medicolegal
+          environment_name: ai-medicolegal-main
+          version_label: "ai-medicolegal-main-${{ steps.format-time.outputs.replaced }}"
           region: us-east-1
           deployment_package: deploy.zip
 
