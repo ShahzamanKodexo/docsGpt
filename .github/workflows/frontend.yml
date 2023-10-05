@@ -1,4 +1,4 @@
-# CI/cd
+# CI/CD
 name: Build, push, and deploy DocsGPT-FE Docker image
 
 on:
